@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>GDSC NU</title>
+<header><!--header-->
+<div class="header__container">
+<img src="photo1695334529.jpeg" alt="" class="header__img">
+</div></header>
+<link rel="stylesheet" href="webquestions.css">
+<style>
+.correctAnswer, .wrongAnswer { display: none; }
+.footer {
+  text-align: center;
+  margin-top: 20px;
+}
+.footer-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+</style>
+</head>
+<body onload="initializeQuestions()">
+<h1> <span style="color:rgb(61, 61, 223);">G</span><span style="color:green;">D</span><span style="color:rgb(216, 166, 73);">S</span><span style="color:rgb(188, 56, 56);">C</span> Najran University </h1><!--the pages title-->
+<div id="question"></div>
+<div id="options"></div>
+<input type="hidden" id="answer">
+
+
+
+<!--answer button -->
+<button onclick="checkAnswer()">Enter</button>
+<br>
+<div id="correctAnswer" class="correctAnswer"><!--reactions-->
+<!--The reaction the user will get if their answer is right-->
+<img src="clappinghands.gif" length="200" width="200">
+</div>
+<div id="wrongAnswer" class="wrongAnswer"> <!--The reaction the user will get if their answer is wrong-->
+<img src="whatswrongwichu.gif" length="250" width="250">
+</div>
+<div id="noAnswer" class="wrongAnswer"> <!--The message the user will get if no answer is selected-->
+<p>Please select an answer.</p>
+</div>
+<div id="message" style="display: none;"> <!--The message to display when all questions have been answered-->
+All questions have been answered!
+<div id="score">
+<p>Correct Answers: <span id="correctCount">0</span></p>
+<p>Wrong Answers: <span id="wrongCount">0</span></p>
+</div>
+</div>
+
+<!--grades for the user-->
+<div id="message" style="display: none;">
+  <!-- The message to display when all questions have been answered -->
+  All questions have been answered!
+  <div id="score">
+    <p>Correct Answers: <span id="correctCount">0</span></p>
+    <p>Wrong Answers: <span id="wrongCount">0</span></p>
+    <p>Grade: <span id="grade"></span></p> <!-- Add this line -->
+  </div>
+</div>
+
+<div class="footer">
+  <a href="https://twitter.com/nu_gdsc" target="_blank">
+  <img class="footer-icon" src="twittericon.png" width="30" height="30">
+  </a>
+  Created by GDSC
+</div>
+<script>
+// the array of questions
+var questions = [
+{
+question: "When was the official holiday of the National Day Kingdom of Saudi Arabia announced?",
+options: ["In 2004", "In 2005", "In 2006", "In 2007"],
+answer: 1
+},
+{
+question: "How long was King Abdulaziz Al Saud ruling the Kingdom of Saudi Arabia?",
+options: ["70 Years", "71 Years", "72 Years", "73 Years"],
+answer: 1
+},
+{
+question: "When did the Kingdom of Saudi Arabia join the United Nations after its unification?",
+options: ["1942", "1943", "1944", "1945"],
+answer: 2
+},
+{
+question: "How many kings did Saudi Ariba had?",
+options: ["8", "7", "6", "5"],
+answer: 1
+},
+{
+question: "who is the founder of third Kingdom of Saudi Arabia?",
+options: ["King Abdulaziz Al-Saud", "Mohammed bin Saud", "Emam Turki bin Saud", "AbdulRahman AlSaud"],
+answer: 0
+},
+{
+question: "who is the first to be given the name: The servant of the two holy mosques",
+options: ["King Salman bin AbdulAziz", "King Khaled bin AbdulAziz", "King Abdullah bin AbdulAziz", "King Fahad bin AbdulAziz"],
+answer: 3
+},
+{
+question: "What does two swords and a palm tree means?",
+options: ["strenght & courage ", "generosity & Goodness", "growth & prosperity", "knowledge & diligence"],
+answer: 0
+},
+{
+question:"what is the first country to establish diplomatic relations with the Kingdom of Saudi Arabia?",
+options: ["America","United Kingdom","German","soviet union"],
+answer:3
+},
+{
+question:"When did King AbdulZiz born?",
+options: ["1295","1294","1293","1300"],
+answer:2
+},
+{
+question:"When did Saudi Arabia Started producing oil?",
+options: ["1937","1938","1939","1940"],
+answer:1
+},
+{
+question:"What is the name of the first Saudi robot?",
+options: ["Hanson Sofia","Fisto","Sara","Cargo Piaggio"],
+answer:2
+},
+{
+question:"What is Saudi Arabia ranking in the internet speed?",
+options: ["3rd", "1st","10th","4th"],
+answer:2
+}
+,
+{
+question:"What is the first Saudi game directed to the world?",
+options: ["XO", "Mincraft","Bairty elmokh","Ibn Batoot"],
+answer:3
+},
+{
+question:"What is Saudi Arabia ranking in Tech in the world out of 139 countries? ",
+options: ["33", "11","44","49"],
+answer:1
+}
+// here is where you can add more questions if needed
+];
+
+var grade = "";
+
+var remainingQuestions = [];
+
+// a counter that counts how many questions answered, right & wrong
+var correctCount = 0;
+var wrongCount = 0;
+
+function initializeQuestions() {
+remainingQuestions = [...questions];
+correctCount = 0;
+wrongCount = 0;
+getRandomQuestion();
+}
+
+function getRandomQuestion() {
+if (remainingQuestions.length === 0) {
+// questions
+document.getElementById("question").style.display = "none";
+// options
+document.getElementById("options").style.display = "none";
+// the message that tells the user that the questions have been answered
+document.getElementById("message").style.display = "block";
+// function for the counter
+document.getElementById("score").style.display = "block";
+if (correctCount >= 10) {
+      grade = "A";
+    } else if (correctCount >= 5 && correctCount <= 10) {
+      grade = "B";
+    } else {
+      grade = "Loser";
+    }
+
+    // Display the grade
+    document.getElementById("message").innerHTML += "<p>Your Grade: " + grade + "</p>";
+
+return;
+}
+
+// this is where it checks for the number of questions, to make sure the questions do not repeat
+var randomIndex = Math.floor(Math.random() * remainingQuestions.length);
+var questionData = remainingQuestions[randomIndex];
+var question = questionData.question;
+var options = questionData.options;
+var answerIndex = questionData.answer;
+
+document.getElementById("question").textContent = question;
+
+var optionsHtml = "";
+for (var i = 0; i < options.length; i++) {
+var option = options[i];
+optionsHtml += '<div class="option"><input type="radio" name="answer" value="' + i + '"> ' + option + '</div>';
+}
+
+document.getElementById("options").innerHTML = optionsHtml;
+document.getElementById("answer").value = answerIndex;
+
+remainingQuestions.splice(randomIndex, 1);
+
+}
+
+function checkAnswer() {
+var selectedAnswer = document.querySelector('input[name="answer"]:checked');
+var correctAnswer = document.getElementById("answer").value;
+
+if (!selectedAnswer) {
+// if the user press enter without choosing an answer a meassage will apear
+// the question will remain the same until the user choose an answer.
+document.getElementById("noAnswer").style.display = "block";
+return;
+}
+document.getElementById("correctCount").textContent = correctCount;
+  document.getElementById("wrongCount").textContent = wrongCount;
+  document.getElementById("grade").textContent = grade; 
+
+document.getElementById("noAnswer").style.display = "none";
+
+if (selectedAnswer.value === correctAnswer) {
+document.getElementById("correctAnswer").style.display = "block";
+document.getElementById("wrongAnswer").style.display = "none";
+correctCount++;
+} else {
+document.getElementById("correctAnswer").style.display = "none";
+document.getElementById("wrongAnswer").style.display = "block";
+wrongCount++;
+}
+
+document.getElementById("correctCount").textContent = correctCount;
+document.getElementById("wrongCount").textContent = wrongCount;
+
+getRandomQuestion();
+}
+</script>
+</body>
+</html>
